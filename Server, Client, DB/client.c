@@ -1,14 +1,3 @@
-/* client.c
-
-   Sample code of 
-   Assignment L1: Simple multi-threaded key-value server
-   for the course MYY601 Operating Systems, University of Ioannina 
-
-   (c) S. Anastasiadis, G. Kappes 2016
-
-*/
-
-
 #include "utils.h"
 #include <pthread.h>
 
@@ -98,7 +87,7 @@ void *put_operation(){
   int value;
   char buffer[BUF_SIZE];
   
-  while(1){                           // Ta threads epanaxrhsimopoiountai. 
+  while(1){
     // create a random value.
     value = rand() % 65 + (-20);
 
@@ -125,7 +114,7 @@ void *put_operation(){
 void *get_operation(){
   char buffer[BUF_SIZE];
 
-  while(1){                           // Ta threads epanaxrhsimopoiountai. 
+  while(1){
     pthread_mutex_lock(&get_mutx);
     if(get_station > MAX_STATION_ID){
       break;
