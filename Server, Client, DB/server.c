@@ -1,13 +1,3 @@
-/* server.c
-
-   Sample code of 
-   Assignment L1: Simple multi-threaded key-value server
-   for the course MYY601 Operating Systems, University of Ioannina 
-
-   (c) S. Anastasiadis, G. Kappes 2016
-
-*/
-
 #include <pthread.h>
 #include <signal.h>
 #include <sys/stat.h>
@@ -197,7 +187,7 @@ void *process_request() {
             break;
           case PUT:                 // Writers
             
-            pthread_mutex_lock(&put_critical);                // ENAS grafeas sthn KISSDB.
+            pthread_mutex_lock(&put_critical);
             // Write the given key/value pair to the database.
             if (KISSDB_put(db, request->key, request->value)) 
               sprintf(response_str, "PUT ERROR\n");
@@ -256,7 +246,7 @@ void threads_consumers(){
   int k, rc;
 
   for(k=0; k<THREAD_NUM; k++){
-    rc = pthread_create(&id[k], NULL, process_request, NULL);                     // Note: To 2o orisma, ayto tou Atrribute, einai NULL: 'joinable' by default.
+    rc = pthread_create(&id[k], NULL, process_request, NULL);
     fprintf(stdout, "Thread(%d/%d) created \t[id: %ld]\n", k+1, THREAD_NUM, id[k]);
     if(rc){
       fprintf(stdout, "ERROR; return code from pthread_create is: %d\n", rc);
@@ -279,23 +269,6 @@ void statistics_handler(){
 
   fprintf(stdout, "\nSignal-> 'Control+Z': program exit, print statistics:\n\tcompleted-requests: %5d\n\tavg-waiting-time: %5lf usecs\n\tavg-service-time: %5lf usecs\t (1sec = 10^6usecs)\n", completed_requests, avgWaitingTime, avgServiceTime);
  
-  /* 
-    Note: Ta threads se aythn thn periptwsh den mas endiaferoun na ginoun join (na apodesmeysoun tous porous tous). 
-          Dhladh otan o Server termatisei, ta nhmata tha termatisoun me to kleisimo ths diergasias pou ta dhmiourghse, apodesmeyontas tous porous tous.
-  
-    for(t=0; t<THREAD_NUM; t++){
-      rc = pthread_join(id[t], NULL);
-      if(rc){
-        fprintf(stdout, "ERROR; return code from pthread_join() is: %d\n", rc);
-        exit(-1);
-      }
-      fprintf(stdout, "thread(%d/%d) [id: %ld] joined.\n", t+1, THREAD_NUM, id[t]);
-    }
-    fprintf(stdout, "Ok, threads joined.\n");
-
-    Note: Edw yparxei Segmentation fault(core dumped), kathws to Prwto thread exei 'ksafnika' diaforetiko id apo ayto pou dhmiourghthke!
-  */
-
   // Destroy the database.
   // Close the database.
   KISSDB_close(db);
@@ -365,7 +338,7 @@ int main() {
   // Creating threads.
   threads_consumers();
 
-  state=EMPTY;              // FIFO Queue is empty at the beggining.
+  state=EMPTY;
 
   // main loop: wait for new connection/requests
   while (1) { 
@@ -379,8 +352,8 @@ int main() {
     fprintf(stderr, "(Info) main: Got connection from '%s'\n", inet_ntoa(client_addr.sin_addr));
 
     //lock tail
-    pthread_mutex_lock(&fifo_mutx);                 // Note: Idia metablhth me to lock ths process_request gia na mhn 'peirazoun' taytoxrona thn FIFO.
-    if(state!=FULL){                               // FIFO Queue isn't full. (It's empty or loaded).
+    pthread_mutex_lock(&fifo_mutx);
+    if(state!=FULL){
       // Apothkeysh stoixeiwn ths kathe Aithshs (pou hrthe me accept()) sthn FIFO. (struct: File-Descriptor, Time)
       aithseis[tail].accptFd = new_fd;
       gettimeofday(&tv, NULL);
@@ -395,7 +368,7 @@ int main() {
       tail=0;                       // Reset tail back at start of FIFO.
     }
 
-    while(tail==head){              // FIFO is full.       Note: Always 'while' at Conditions here, to avoid unwanted problems. (Never 'if')
+    while(tail==head){              // FIFO is full.
       state=FULL;
       fprintf(stdout, "(FIFO is Full) waiting for empty slot in FIFO...\n");
 
