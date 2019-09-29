@@ -1,6 +1,6 @@
 # Parallel-Programming
 
-This project is refered to creating a **multi-threading** server in order to accept one or more clients requests to its DB, a lot faster. Requests can vary from searching or/and saving at server's DB, via clients (PUT-GET) keys and values. These are also structured/put in a circle-queue so they can be processed.  All process requests are also timed. There was used UNIX's POSIX thread library.
+This project is refered to creating a **multi-threading** server in order to accept one or more clients requests to its DB, a lot faster. Requests can vary from searching or/and saving at server's DB, via clients (PUT-GET) keys and values. These are also structured/put in a circled-FIFO-queue so they can be processed.  All process requests are also timed. There was used UNIX's POSIX thread library.
 
 ***Notes***: 
  1. Run >**make all**
